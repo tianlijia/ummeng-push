@@ -52,7 +52,7 @@ class Android implements PushInterface
         }
     }
 
-    public function sendUniCast($deviceTokens, $ticker, $title, $text, $afterOpen, array $customs = [], $isFormal = true)
+    public function sendUniCast1111($deviceTokens, $ticker, $title, $text, $afterOpen, array $customs = [], $isFormal = true)
     {
         try {
             $uniCast = new AndroidUniCast();
@@ -77,6 +77,31 @@ class Android implements PushInterface
             print("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
             print("Caught exception: " . $e->getMessage());
+        }
+    }
+    public function sendUniCast($docid, $content)
+    {
+        try {
+            $unicast = new AndroidUnicast();
+            $unicast->setAppMasterSecret($this->appMasterSecret);
+            $unicast->setPredefinedKeyValue("appkey",           $this->appKey);
+            $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);
+            // Set your device tokens here
+            $unicast->setPredefinedKeyValue("device_tokens",    "");
+            $unicast->setPredefinedKeyValue("type", 'customizedcast');
+            $unicast->setPredefinedKeyValue("alias_type", 'normal');
+            $unicast->setPredefinedKeyValue("alias", $docid);
+
+            $unicast->setPredefinedKeyValue("ticker",           '1');
+            $unicast->setPredefinedKeyValue("title",            $content);
+            $unicast->setPredefinedKeyValue("text",             "3");
+            $unicast->setPredefinedKeyValue("display_type",      "notification");
+            $unicast->setPredefinedKeyValue("after_open",       "go_custom");
+            $unicast->setPredefinedKeyValue("custom",       "");
+            $unicast->setPredefinedKeyValue("production_mode", "false");
+            return $unicast->send();
+        } catch (\Exception $e) {
+            print("Caught exception: " . $e->getMessage().'line-'.$e->getLine().'---file.'.$e->getFile());
         }
     }
 

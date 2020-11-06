@@ -1,0 +1,18 @@
+{
+    "name": "tianlijia/ummeng-push",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "tianlijia",
+            "email": "j19527@126.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "UMeng\\": "src/Umeng"
+        }
+    }
+}

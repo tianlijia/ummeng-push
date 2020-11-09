@@ -79,12 +79,14 @@ class Android implements PushInterface
             print("Caught exception: " . $e->getMessage());
         }
     }
-    public function sendUniCast($docid, $content)
+
+
+    public function sendUniCast($docid,$content,$type,$ylist)
     {
         try {
             $unicast = new AndroidUnicast();
             $unicast->setAppMasterSecret($this->appMasterSecret);
-            $unicast->setPredefinedKeyValue("appkey",           $this->appKey);
+            $unicast->setPredefinedKeyValue("appkey",           $this->appkey);
             $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);
             // Set your device tokens here
             $unicast->setPredefinedKeyValue("device_tokens",    "");
@@ -98,10 +100,20 @@ class Android implements PushInterface
             $unicast->setPredefinedKeyValue("display_type",      "notification");
             $unicast->setPredefinedKeyValue("after_open",       "go_custom");
             $unicast->setPredefinedKeyValue("custom",       "");
+            // Set 'production_mode' to 'false' if it's a test device.
+            // For how to register a test device, please see the developer doc.
             $unicast->setPredefinedKeyValue("production_mode", "false");
-            return $unicast->send();
-        } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage().'line-'.$e->getLine().'---file.'.$e->getFile());
+            // Set extra fields
+            $unicast->setExtraField("param", $ylist);
+            $unicast->setExtraField("type", $type);
+
+            //print("Sending unicast notification, please wait...\r\n");
+            $unicast->send();
+            //print("Sent SUCCESS\r\n");
+
+        } catch (Exception $e) {
+            //print("Caught exception: " . $e->getMessage());
+            CLog::fatal("Caught exception: " . $e->getMessage());
         }
     }
 

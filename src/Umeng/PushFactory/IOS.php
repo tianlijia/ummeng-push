@@ -65,7 +65,7 @@ class IOS implements PushInterface
      * @param array $customs 自定义字段
      * @param boolean $isFormal
      */
-    function sendUniCast($deviceTokens, $alert, $customs, $isFormal = true)
+    function sendUniCastTest($deviceTokens, $alert, $customs, $isFormal = true)
     {
         try {
             $uniCast = new IOSUniCast();
@@ -88,6 +88,45 @@ class IOS implements PushInterface
             print("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
             print("Caught exception: " . $e->getMessage());
+        }
+    }
+    /**
+     *
+     * @param string $deviceTokens 设备唯一标识 ios为64位
+     * @param string $alert
+     * @param array $customs 自定义字段
+     * @param boolean $isFormal
+     */
+    function sendUniCast($docid,$content,$type,$ylist)
+    {
+        try {
+            $unicast = new IOSUnicast();
+            $unicast->setAppMasterSecret($this->appMasterSecret);
+            $unicast->setPredefinedKeyValue("appkey",           $this->appkey);
+            $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);
+            // Set your device tokens here
+            $unicast->setPredefinedKeyValue("device_tokens",    "");
+            $unicast->setPredefinedKeyValue("type", 'customizedcast');
+            $unicast->setPredefinedKeyValue("alias_type", 'normal');
+            $unicast->setPredefinedKeyValue("alias", $docid);
+
+            $unicast->setPredefinedKeyValue("alert", $content);
+            $unicast->setPredefinedKeyValue("badge", 0);
+            $unicast->setPredefinedKeyValue("sound", "chime");
+            // Set 'production_mode' to 'true' if your app is under production mode
+            $unicast->setPredefinedKeyValue("production_mode", "false");
+            // Set customized fields
+            $unicast->setCustomizedField("param", $ylist);
+            $unicast->setCustomizedField("type", $type);
+
+            //print("Sending unicast notification, please wait...\r\n");
+            CLog::debug('Sending unicast notification, please wait...');
+            $unicast->send();
+            //print("Sent SUCCESS\r\n");
+            CLog::debug('Sent SUCCESS');
+        } catch (Exception $e) {
+            //print("Caught exception: " . $e->getMessage());
+            CLog::fatal("Caught exception: " . $e->getMessage());
         }
     }
 

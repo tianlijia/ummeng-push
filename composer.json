@@ -14,5 +14,10 @@
         "psr-4": {
             "UMeng\\": "src/Umeng"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.0"
+        }
     }
 }

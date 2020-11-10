@@ -120,13 +120,13 @@ class IOS implements PushInterface
             $unicast->setCustomizedField("type", $type);
 
             //print("Sending unicast notification, please wait...\r\n");
-            CLog::debug('Sending unicast notification, please wait...');
+            \Log::debug('Sending unicast notification, please wait...');
             $unicast->send();
             //print("Sent SUCCESS\r\n");
-            CLog::debug('Sent SUCCESS');
+            \Log::debug('Sent SUCCESS');
         } catch (Exception $e) {
             //print("Caught exception: " . $e->getMessage());
-            CLog::fatal("Caught exception: " . $e->getMessage());
+            \Log::fatal("Caught exception: " . $e->getMessage());
         }
     }
 

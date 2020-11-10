@@ -113,7 +113,7 @@ class Android implements PushInterface
 
         } catch (Exception $e) {
             //print("Caught exception: " . $e->getMessage());
-            CLog::fatal("Caught exception: " . $e->getMessage());
+            \Log::fatal("Caught exception: " . $e->getMessage());
         }
     }
 

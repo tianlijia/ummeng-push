@@ -102,7 +102,7 @@ class IOS implements PushInterface
         try {
             $unicast = new IOSUnicast();
             $unicast->setAppMasterSecret($this->appMasterSecret);
-            $unicast->setPredefinedKeyValue("appkey",           $this->appkey);
+            $unicast->setPredefinedKeyValue("appkey",           $this->appKey);
             $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);
             // Set your device tokens here
             $unicast->setPredefinedKeyValue("device_tokens",    "");

@@ -81,7 +81,7 @@ class Android implements PushInterface
     }
 
 
-    public function sendUniCast($docid,$content,$type,$ylist)
+    public function sendUniCast($docid,$content,$type,$ylist,$text='')
     {
         try {
             $unicast = new AndroidUnicast();
@@ -96,7 +96,7 @@ class Android implements PushInterface
 
             $unicast->setPredefinedKeyValue("ticker",           '1');
             $unicast->setPredefinedKeyValue("title",            $content);
-            $unicast->setPredefinedKeyValue("text",             "3");
+            $unicast->setPredefinedKeyValue("text",             $text);
             $unicast->setPredefinedKeyValue("display_type",      "notification");
             $unicast->setPredefinedKeyValue("after_open",       "go_custom");
             $unicast->setPredefinedKeyValue("custom",       "");

@@ -13,7 +13,7 @@ use UMeng\Ios\IOSCustomizedCast;
 use UMeng\Ios\IOSFileCast;
 use UMeng\Ios\IOSGroupCast;
 use UMeng\Ios\IOSUniCast;
-//use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 class IOS implements PushInterface
 {
@@ -83,13 +83,13 @@ class IOS implements PushInterface
             $unicast->setPredefinedKeyValue("badge", 0);
             $unicast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
-            $unicast->setPredefinedKeyValue("production_mode", true);
+            $unicast->setPredefinedKeyValue("production_mode", config('env.IOS_PRODUCTION_MODE', 'false'));
             // Set customized fields
             $unicast->setCustomizedField("param", $ylist);
             $unicast->setCustomizedField("type", $type);
 
             //print("Sending unicast notification, please wait...\r\n");
-            \Log::debug('Sending unicast notification, please wait...');
+            Log::debug('Sending unicast notification, please wait...');
             $unicast->send();
             //print("Sent SUCCESS\r\n");
             \Log::debug('Sent SUCCESS');

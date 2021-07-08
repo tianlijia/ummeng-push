@@ -13,6 +13,7 @@ use UMeng\Ios\IOSCustomizedCast;
 use UMeng\Ios\IOSFileCast;
 use UMeng\Ios\IOSGroupCast;
 use UMeng\Ios\IOSUniCast;
+use Illuminate\Support\Facades\Log;
 
 class IOS implements PushInterface
 {
@@ -65,38 +66,6 @@ class IOS implements PushInterface
      * @param array $customs 自定义字段
      * @param boolean $isFormal
      */
-    function sendUniCastTest($deviceTokens, $alert, $customs, $isFormal = true)
-    {
-        try {
-            $uniCast = new IOSUniCast();
-            $uniCast->setAppMasterSecret($this->appMasterSecret);
-            $uniCast->setPredefinedKeyValue("appkey", $this->appKey);
-            $uniCast->setPredefinedKeyValue("timestamp", $this->timestamp);
-            // Set your device tokens here
-            $uniCast->setPredefinedKeyValue("device_tokens", $deviceTokens);
-            $uniCast->setPredefinedKeyValue("alert", $alert);
-            $uniCast->setPredefinedKeyValue("badge", 0);
-            $uniCast->setPredefinedKeyValue("sound", "chime");
-            // Set 'production_mode' to 'true' if your app is under production mode
-            $uniCast->setPredefinedKeyValue("production_mode", $isFormal);
-            // Set customized fields
-            foreach ( $customs as $key => $value ){
-                $uniCast->setCustomizedField($key, $value);
-            }
-            print("Sending unicast notification, please wait...\r\n");
-            $uniCast->send();
-            print("Sent SUCCESS\r\n");
-        } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage());
-        }
-    }
-    /**
-     *
-     * @param string $deviceTokens 设备唯一标识 ios为64位
-     * @param string $alert
-     * @param array $customs 自定义字段
-     * @param boolean $isFormal
-     */
     function sendUniCast($docid,$content,$type,$ylist)
     {
         try {
@@ -114,19 +83,19 @@ class IOS implements PushInterface
             $unicast->setPredefinedKeyValue("badge", 0);
             $unicast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
-            $unicast->setPredefinedKeyValue("production_mode", "false");
+            $unicast->setPredefinedKeyValue("production_mode", config('env.IOS_PRODUCTION_MODE', 'false'));
             // Set customized fields
             $unicast->setCustomizedField("param", $ylist);
             $unicast->setCustomizedField("type", $type);
 
             //print("Sending unicast notification, please wait...\r\n");
-            \Log::debug('Sending unicast notification, please wait...');
+            Log::debug('Sending unicast notification, please wait...');
             $unicast->send();
             //print("Sent SUCCESS\r\n");
-            \Log::debug('Sent SUCCESS');
+            Log::debug('Sent SUCCESS');
         } catch (Exception $e) {
             //print("Caught exception: " . $e->getMessage());
-            \Log::fatal("Caught exception: " . $e->getMessage());
+            Log::fatal("Caught exception: " . $e->getMessage());
         }
     }
 

@@ -7,6 +7,7 @@
 
 namespace UMeng\PushFactory;
 
+use Illuminate\Support\Facades\Log;
 use UMeng\Android\AndroidBroadcast;
 use UMeng\Android\AndroidCustomizedCast;
 use UMeng\Android\AndroidFileCast;
@@ -44,11 +45,11 @@ class Android implements PushInterface
             foreach ( $customs as $key => $value ){
                 $broCast->setExtraField($key, $value);
             }
-            print("Sending broadcast notification, please wait...\r\n");
+            Log::Info("Sending broadcast notification, please wait...\r\n");
             $broCast->send();
-            print("Sent SUCCESS\r\n");
+            Log::Info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage());
+            Log::Info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -72,16 +73,14 @@ class Android implements PushInterface
             foreach ( $customs as $key => $value ){
                 $uniCast->setExtraField($key, $value);
             }
-            print("Sending unicast notification, please wait...\r\n");
+            Log::Info("Sending unicast notification, please wait...\r\n");
             $uniCast->send();
-            print("Sent SUCCESS\r\n");
+            Log::Info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage());
+            Log::Info("Caught exception: " . $e->getMessage());
         }
     }
-
-
-    public function sendUniCast($docid,$content,$type,$ylist,$text='')
+    public function sendUniCast($docid, $content)
     {
         try {
             $unicast = new AndroidUnicast();
@@ -96,24 +95,14 @@ class Android implements PushInterface
 
             $unicast->setPredefinedKeyValue("ticker",           '1');
             $unicast->setPredefinedKeyValue("title",            $content);
-            $unicast->setPredefinedKeyValue("text",             $text);
+            $unicast->setPredefinedKeyValue("text",             "3");
             $unicast->setPredefinedKeyValue("display_type",      "notification");
             $unicast->setPredefinedKeyValue("after_open",       "go_custom");
             $unicast->setPredefinedKeyValue("custom",       "");
-            // Set 'production_mode' to 'false' if it's a test device.
-            // For how to register a test device, please see the developer doc.
             $unicast->setPredefinedKeyValue("production_mode", "false");
-            // Set extra fields
-            $unicast->setExtraField("param", $ylist);
-            $unicast->setExtraField("type", $type);
-
-            //print("Sending unicast notification, please wait...\r\n");
-            $unicast->send();
-            //print("Sent SUCCESS\r\n");
-
-        } catch (Exception $e) {
-            //print("Caught exception: " . $e->getMessage());
-            \Log::fatal("Caught exception: " . $e->getMessage());
+            return $unicast->send();
+        } catch (\Exception $e) {
+            Log::info("Caught exception: " . $e->getMessage().'line-'.$e->getLine().'---file.'.$e->getFile());
         }
     }
 
@@ -128,14 +117,14 @@ class Android implements PushInterface
             $fileCast->setPredefinedKeyValue("title", $title);
             $fileCast->setPredefinedKeyValue("text", $text);
             $fileCast->setPredefinedKeyValue("after_open", $afterOpen);  //go to app
-            print("Uploading file contents, please wait...\r\n");
+            Log::Info("Uploading file contents, please wait...\r\n");
             // Upload your device tokens, and use '\n' to split them if there are multiple tokens
             $fileCast->uploadContents("aa" . "\n" . "bb");
-            print("Sending filecast notification, please wait...\r\n");
+            Log::Info("Sending filecast notification, please wait...\r\n");
             $fileCast->send();
-            print("Sent SUCCESS\r\n");
+            Log::Info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage());
+            Log::Info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -155,11 +144,11 @@ class Android implements PushInterface
             // Set 'production_mode' to 'false' if it's a test device.
             // For how to register a test device, please see the developer doc.
             $groupCast->setPredefinedKeyValue("production_mode", $isFormal);
-            print("Sending groupcast notification, please wait...\r\n");
+            Log::Info("Sending groupcast notification, please wait...\r\n");
             $groupCast->send();
-            print("Sent SUCCESS\r\n");
+            Log::Info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage());
+            Log::Info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -180,11 +169,11 @@ class Android implements PushInterface
             $customizedCast->setPredefinedKeyValue("title", $title);
             $customizedCast->setPredefinedKeyValue("text", $text);
             $customizedCast->setPredefinedKeyValue("after_open", $afterOpen);
-            print("Sending customizedcast notification, please wait...\r\n");
+            Log::Info("Sending customizedcast notification, please wait...\r\n");
             $customizedCast->send();
-            print("Sent SUCCESS\r\n");
+            Log::Info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage());
+            Log::Info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -204,11 +193,11 @@ class Android implements PushInterface
             $customizedCast->setPredefinedKeyValue("title", $title);
             $customizedCast->setPredefinedKeyValue("text", $test);
             $customizedCast->setPredefinedKeyValue("after_open", $afterOpen);
-            print("Sending customizedcast notification, please wait...\r\n");
+            Log::Info("Sending customizedcast notification, please wait...\r\n");
             $customizedCast->send();
-            print("Sent SUCCESS\r\n");
+            Log::Info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            print("Caught exception: " . $e->getMessage());
+            Log::Info("Caught exception: " . $e->getMessage());
         }
     }
 }

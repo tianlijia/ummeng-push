@@ -60,38 +60,42 @@ class IOS implements PushInterface
     }
 
     /**
-     *
+     * 发送友盟提醒
      * @param string $deviceTokens 设备唯一标识 ios为64位
      * @param string $alert
      * @param array $customs 自定义字段
      * @param boolean $isFormal
+     * @param string $aliasType 这边是医助端还是医生端接消息参数：normal医生端；assistant医助端；
      */
-    function sendUniCast($deviceTokens, $alert, $customs, $isFormal = true)
+    function sendUniCast($assIdOrDoctorId, $content, $type, $ylist)
     {
         try {
-            $uniCast = new IOSUniCast();
-            $uniCast->setAppMasterSecret($this->appMasterSecret);
-            $uniCast->setPredefinedKeyValue("appkey", $this->appKey);
-            $uniCast->setPredefinedKeyValue("timestamp", $this->timestamp);
+            $unicast = new IOSUnicast();
+            $unicast->setAppMasterSecret($this->appMasterSecret);
+            $unicast->setPredefinedKeyValue("appkey", $this->appKey);
+            $unicast->setPredefinedKeyValue("timestamp", $this->timestamp);
             // Set your device tokens here
-            $uniCast->setPredefinedKeyValue("device_tokens", $deviceTokens);
-            $uniCast->setPredefinedKeyValue("alert", $alert);
-            $uniCast->setPredefinedKeyValue("badge", 0);
-            $uniCast->setPredefinedKeyValue("sound", "chime");
+            $unicast->setPredefinedKeyValue("device_tokens", "");
+            $unicast->setPredefinedKeyValue("type", 'customizedcast');
+            $unicast->setPredefinedKeyValue("alias_type", "normal");
+            $unicast->setPredefinedKeyValue("alias", $assIdOrDoctorId);
+
+            $unicast->setPredefinedKeyValue("alert", $content);
+            $unicast->setPredefinedKeyValue("badge", 0);
+            $unicast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
-            $uniCast->setPredefinedKeyValue("production_mode", $isFormal);
+            $unicast->setPredefinedKeyValue("production_mode", config('env.IOS_PRODUCTION_MODE', 'false'));
             // Set customized fields
-            foreach ( $customs as $key => $value ){
-                $uniCast->setCustomizedField($key, $value);
-            }
-            Log::info("Sending unicast notification, please wait...\r\n");
-            $uniCast->send();
-            Log::info("Sent SUCCESS\r\n");
-        } catch (\Exception $e) {
-            Log::info("Caught exception: " . $e->getMessage());
+            $unicast->setCustomizedField("param", $ylist);
+            $unicast->setCustomizedField("type", $type);
+
+            Log::debug('Sending unicast notification, please wait...');
+            $unicast->send();
+            Log::debug('Sent SUCCESS');
+        } catch (Exception $e) {
+            Log::fatal("Caught exception: " . $e->getMessage());
         }
     }
-
     /**
      * @param string $alert
      * @param boolean $isFormal

@@ -80,29 +80,61 @@ class Android implements PushInterface
             Log::Info("Caught exception: " . $e->getMessage());
         }
     }
-    public function sendUniCast($docid, $content)
+    /**
+     * 安卓端推送
+     * @param $assOrDoctorId
+     * @param $content
+     * @param $type
+     * @param $ylist
+     * @throws \Exception
+     */
+    public function sendUniCast($assOrDoctorId, $content, $type, $ylist)
     {
         try {
             $unicast = new AndroidUnicast();
             $unicast->setAppMasterSecret($this->appMasterSecret);
-            $unicast->setPredefinedKeyValue("appkey",           $this->appKey);
-            $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);
+            $unicast->setPredefinedKeyValue("appkey", $this->appKey);
+            $unicast->setPredefinedKeyValue("timestamp", $this->timestamp);
             // Set your device tokens here
-            $unicast->setPredefinedKeyValue("device_tokens",    "");
+            $unicast->setPredefinedKeyValue("device_tokens", "");
             $unicast->setPredefinedKeyValue("type", 'customizedcast');
             $unicast->setPredefinedKeyValue("alias_type", 'normal');
-            $unicast->setPredefinedKeyValue("alias", $docid);
+            $unicast->setPredefinedKeyValue("alias", $assOrDoctorId);
 
-            $unicast->setPredefinedKeyValue("ticker",           '1');
-            $unicast->setPredefinedKeyValue("title",            $content);
-            $unicast->setPredefinedKeyValue("text",             "3");
-            $unicast->setPredefinedKeyValue("display_type",      "notification");
-            $unicast->setPredefinedKeyValue("after_open",       "go_custom");
-            $unicast->setPredefinedKeyValue("custom",       "");
-            $unicast->setPredefinedKeyValue("production_mode", "false");
-            return $unicast->send();
-        } catch (\Exception $e) {
-            Log::info("Caught exception: " . $e->getMessage().'line-'.$e->getLine().'---file.'.$e->getFile());
+            $unicast->setPredefinedKeyValue("ticker", '1');
+            $unicast->setPredefinedKeyValue("title", $content);
+            $unicast->setPredefinedKeyValue("text", "");
+            $unicast->setPredefinedKeyValue("display_type", "notification");
+            $unicast->setPredefinedKeyValue("after_open", "go_custom");
+            $unicast->setPredefinedKeyValue("custom", "");
+            // Set 'production_mode' to 'false' if it's a test device.
+            // For how to register a test device, please see the developer doc.
+            $unicast->setPredefinedKeyValue("production_mode", "true");
+
+            $unicast->setPredefinedKeyValue("mipush", true);
+            $unicast->setPredefinedKeyValue("mi_activity", 'com.dayi.patient.MfrMessageActivity');
+
+            // Set expire time like redis cache. In case send times repeat.
+            $unicast->setPredefinedKeyValue("policy", [
+                "expire_time" => date("Y-m-d H:i:s", (24 * 60 * 60 + time()))
+            ]);
+            // from xiaomi, oppo, huawei, meizu channel etc.
+            $unicast->setPredefinedKeyValue("channel_properties", [
+                "channel_activity" => "com.dayi.patient.MfrMessageActivity",
+                "mi_channel_id" => "XLYS_DOCTOR_TXVIDEO",
+                "vivo_classification" => "1",
+                "oppo_channel_id" => "XLYS_DOCTOR_TXVIDEO",
+                "main_activity" => "com.dayi.patient.ui.home.HomeActivity",
+            ]);
+
+            // Set extra fields
+            $unicast->setExtraField("param", $ylist);
+            $unicast->setExtraField("type", $type);
+
+            $unicast->send();
+
+        } catch (Exception $e) {
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 

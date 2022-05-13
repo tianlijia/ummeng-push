@@ -8,12 +8,12 @@
 namespace UMeng\PushFactory;
 
 
-use Illuminate\Support\Facades\Log;
 use UMeng\Ios\IOSBroadCast;
 use UMeng\Ios\IOSCustomizedCast;
 use UMeng\Ios\IOSFileCast;
 use UMeng\Ios\IOSGroupCast;
 use UMeng\Ios\IOSUniCast;
+use Illuminate\Support\Facades\Log;
 
 class IOS implements PushInterface
 {
@@ -48,14 +48,12 @@ class IOS implements PushInterface
             // Set 'production_mode' to 'true' if your app is under production mode
             $broCast->setPredefinedKeyValue("production_mode", $isFormal);
             // Set customized fields
-            foreach ( $customs as $key => $value ){
+            foreach ($customs as $key => $value) {
                 $broCast->setCustomizedField($key, $value);
             }
-            Log::Info("Sending broadcast notification, please wait...\r\n");
             $broCast->send();
-            Log::Info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -96,6 +94,7 @@ class IOS implements PushInterface
             Log::fatal("Caught exception: " . $e->getMessage());
         }
     }
+
     /**
      * @param string $alert
      * @param boolean $isFormal
@@ -113,14 +112,14 @@ class IOS implements PushInterface
             $fileCast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
             $fileCast->setPredefinedKeyValue("production_mode", $isFormal);
-            Log::Info("Uploading file contents, please wait...\r\n");
+            Log::info("Uploading file contents, please wait...\r\n");
             // Upload your device tokens, and use '\n' to split them if there are multiple tokens
             $fileCast->uploadContents($uploadContent);
-            Log::Info("Sending filecast notification, please wait...\r\n");
+            Log::info("Sending filecast notification, please wait...\r\n");
             $fileCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -138,11 +137,11 @@ class IOS implements PushInterface
             $groupCast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
             $groupCast->setPredefinedKeyValue("production_mode", $isFormal);
-            Log::Info("Sending groupcast notification, please wait...\r\n");
+            Log::info("Sending groupcast notification, please wait...\r\n");
             $groupCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -165,11 +164,11 @@ class IOS implements PushInterface
             $customizedCast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
             $customizedCast->setPredefinedKeyValue("production_mode", $isFormal);
-            Log::Info("Sending customizedcast notification, please wait...\r\n");
+            Log::info("Sending customizedcast notification, please wait...\r\n");
             $customizedCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 }

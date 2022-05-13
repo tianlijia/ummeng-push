@@ -2,6 +2,8 @@
 
 namespace UMeng;
 
+use Illuminate\Support\Facades\Log;
+
 abstract class UmengNotification
 {
     // The host
@@ -48,7 +50,11 @@ abstract class UmengNotification
         "production_mode",
         "feedback",
         "description",
-        "thirdparty_id"
+        "thirdparty_id",
+        "mipush",
+        "mi_activity",
+        "policy",
+        "channel_properties",
     ];
     protected $POLICY_KEYS = [
         "start_time",
@@ -111,7 +117,7 @@ abstract class UmengNotification
         $curlErrNo = curl_errno($ch);
         $curlErr = curl_error($ch);
         curl_close($ch);
-        //print($result . "\r\n");
+        Log::info("Umeng send msg is [ " . json_encode($postBody) . " ], result is [ " . json_encode($result) . " ]");
         if ($httpCode == "0") {
             // Time out
             throw new \Exception("Curl error number:" . $curlErrNo . " , Curl error details:" . $curlErr . "\r\n");

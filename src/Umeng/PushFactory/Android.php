@@ -42,44 +42,17 @@ class Android implements PushInterface
             // For how to register a test device, please see the developer doc.
             $broCast->setPredefinedKeyValue("production_mode", $isFormal);
             // [optional]Set extra fields
-            foreach ( $customs as $key => $value ){
+            foreach ($customs as $key => $value) {
                 $broCast->setExtraField($key, $value);
             }
-            Log::Info("Sending broadcast notification, please wait...\r\n");
+            Log::info("Sending broadcast notification, please wait...\r\n");
             $broCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 
-    public function sendUniCast1111($deviceTokens, $ticker, $title, $text, $afterOpen, array $customs = [], $isFormal = true)
-    {
-        try {
-            $uniCast = new AndroidUniCast();
-            $uniCast->setAppMasterSecret($this->appMasterSecret);
-            $uniCast->setPredefinedKeyValue("appkey", $this->appKey);
-            $uniCast->setPredefinedKeyValue("timestamp", $this->timestamp);
-            // Set your device tokens here
-            $uniCast->setPredefinedKeyValue("device_tokens", $deviceTokens);
-            $uniCast->setPredefinedKeyValue("ticker", $ticker);
-            $uniCast->setPredefinedKeyValue("title", $title);
-            $uniCast->setPredefinedKeyValue("text", $text);
-            $uniCast->setPredefinedKeyValue("after_open", $afterOpen);
-            // Set 'production_mode' to 'false' if it's a test device.
-            // For how to register a test device, please see the developer doc.
-            $uniCast->setPredefinedKeyValue("production_mode", $isFormal);
-            // Set extra fields
-            foreach ( $customs as $key => $value ){
-                $uniCast->setExtraField($key, $value);
-            }
-            Log::Info("Sending unicast notification, please wait...\r\n");
-            $uniCast->send();
-            Log::Info("Sent SUCCESS\r\n");
-        } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
-        }
-    }
     /**
      * 安卓端推送
      * @param $assOrDoctorId
@@ -149,14 +122,14 @@ class Android implements PushInterface
             $fileCast->setPredefinedKeyValue("title", $title);
             $fileCast->setPredefinedKeyValue("text", $text);
             $fileCast->setPredefinedKeyValue("after_open", $afterOpen);  //go to app
-            Log::Info("Uploading file contents, please wait...\r\n");
+            Log::info("Uploading file contents, please wait...\r\n");
             // Upload your device tokens, and use '\n' to split them if there are multiple tokens
             $fileCast->uploadContents("aa" . "\n" . "bb");
-            Log::Info("Sending filecast notification, please wait...\r\n");
+            Log::info("Sending filecast notification, please wait...\r\n");
             $fileCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -176,11 +149,11 @@ class Android implements PushInterface
             // Set 'production_mode' to 'false' if it's a test device.
             // For how to register a test device, please see the developer doc.
             $groupCast->setPredefinedKeyValue("production_mode", $isFormal);
-            Log::Info("Sending groupcast notification, please wait...\r\n");
+            Log::info("Sending groupcast notification, please wait...\r\n");
             $groupCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -201,11 +174,11 @@ class Android implements PushInterface
             $customizedCast->setPredefinedKeyValue("title", $title);
             $customizedCast->setPredefinedKeyValue("text", $text);
             $customizedCast->setPredefinedKeyValue("after_open", $afterOpen);
-            Log::Info("Sending customizedcast notification, please wait...\r\n");
+            Log::info("Sending customizedcast notification, please wait...\r\n");
             $customizedCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 
@@ -225,11 +198,11 @@ class Android implements PushInterface
             $customizedCast->setPredefinedKeyValue("title", $title);
             $customizedCast->setPredefinedKeyValue("text", $test);
             $customizedCast->setPredefinedKeyValue("after_open", $afterOpen);
-            Log::Info("Sending customizedcast notification, please wait...\r\n");
+            Log::info("Sending customizedcast notification, please wait...\r\n");
             $customizedCast->send();
-            Log::Info("Sent SUCCESS\r\n");
+            Log::info("Sent SUCCESS\r\n");
         } catch (\Exception $e) {
-            Log::Info("Caught exception: " . $e->getMessage());
+            Log::info("Caught exception: " . $e->getMessage());
         }
     }
 }

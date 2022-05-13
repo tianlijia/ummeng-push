@@ -54,7 +54,7 @@ abstract class UmengNotification
         "mipush",
         "mi_activity",
         "policy",
-        "channel_properties",
+        "channel_properties"
     ];
     protected $POLICY_KEYS = [
         "start_time",
